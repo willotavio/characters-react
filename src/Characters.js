@@ -6,7 +6,7 @@ export const Characters = () => {
 
     useEffect(() => {
         getCharacters();
-      }, []);
+    }, []);
 
     const getCharacters = async () => {
         try{
@@ -33,13 +33,21 @@ export const Characters = () => {
             <ul>
                 {searchEntry ? 
                 
-                characters.filter((character) => searchEntry.toLowerCase() == character.name.toLowerCase())
-                .map((character, index) => <li key={index}>{character.name}</li>)
-                
-                : characters.map((character, index) => (
-                    
-                    <li key={index}>{character.name}</li>
-                ))}
+                characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
+                    .map((character, index) => (
+                        <>
+                            <li key={index}>{character.id}</li>
+                            <li>{character.name}</li>
+                            <br />
+                        </>
+                    ))
+                        : characters.map((character) => (
+                        <>
+                            <li key={character.id}>{character.id}</li>
+                            <li>{character.name}</li>
+                            <br />
+                        </>
+                    ))}
             </ul>
         </div>
     );
