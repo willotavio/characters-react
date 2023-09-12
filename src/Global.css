@@ -1,0 +1,23 @@
+body{
+    font-family:'Segoe UI', Tahoma, sans-serif;
+}
+
+.listDefault{
+    margin: 1rem;
+}
+
+.listDefault table{
+    border-collapse: collapse;
+    margin: auto;
+    min-width: 30rem;
+}
+
+.listDefault table td{
+    border: 0.1rem solid #ddd;
+    padding: 0.5rem;
+}
+
+.listDefault table thead tr{
+    background-color: #ddddddbb;
+    text-align: center;
+}

@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { useState, useEffect } from 'react';
+import './Global.css';
 export const Mangas = () => {
 
     const [mangas, setMangas] = useState([]);
@@ -54,27 +55,44 @@ export const Mangas = () => {
             <p>Get Mangas</p>
 
             <input type='text' onChange={handleSearch}></input>
-
-            <ul>
-                {searchEntry ?
-                
-                mangas.filter((mangas) => (searchEntry.toLowerCase() === mangas.name.toLowerCase()))
-                    .map((manga) => (
-                        <>
-                            <li key={manga.id}>{manga.id}</li>
-                            <li>{manga.name}</li>
-                            <br />
-                        </>
-                    ))
-                        : mangas.map((manga) => (
-                        <>
-                            <li key={manga.id}>{manga.id}</li>
-                            <li>{manga.name}</li>
-                            <br />
-                        </>
-                    ))
-            }
-            </ul>
+            <div className='listDefault'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Release Date</th>
+                            <th>Synopsis</th>
+                            <th>Manga Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {searchEntry 
+                        ? mangas.filter((mangas) => (searchEntry.toLowerCase() === mangas.name.toLowerCase()))
+                            .map((manga) => (
+                                <tr>
+                                    <td key={manga.id}>{manga.id}</td>
+                                    <td>{manga.name}</td>
+                                    <td>{manga.releaseDate}</td>
+                                    <td>{manga.synopsis}</td>
+                                    <td>{manga.mangaStatus}</td>
+                                    <br />
+                                </tr>
+                            ))
+                                : mangas.map((manga) => (
+                                <tr>
+                                    <td key={manga.id}>{manga.id}</td>
+                                    <td>{manga.name}</td>
+                                    <td>{manga.releaseDate}</td>
+                                    <td>{manga.synopsis}</td>
+                                    <td>{manga.mangaStatus}</td>
+                                    <br />
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
 
             <input type="text" name="name" value={manga.name} onChange={handleManga}></input>
             <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga}></input>
