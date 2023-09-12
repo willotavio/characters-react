@@ -26,7 +26,7 @@ export const Characters = () => {
 
     return(
         <div>
-            <p>AQUI TEM UMA API MT FODA ----v</p>
+            <p>Get Characters</p>
 
             <input type='text' onChange={handleSearch}></input>
             
