@@ -2,23 +2,7 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import '../../Global.css';
 import { CharacterForm } from './CharacterForm';
-export const CharacterList = () => {
-
-    const [characters, setCharacters] = useState([]);
-
-    useEffect(() => {
-        getCharacters();
-    }, []);
-
-    const getCharacters = async () => {
-        try{
-            const result = await Axios.get('http://localhost:8080/characters-api/character');
-            setCharacters(result.data);
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
+export const CharacterList = ({ characters }) => {
 
     const [searchEntry, setSearchEntry] = useState("");
 
@@ -31,7 +15,6 @@ export const CharacterList = () => {
     const searchCharacter = () => {
         setSearchedName(searchEntry);
     }
-
     return(
         <div>
             <p>Get Characters</p>
@@ -56,7 +39,7 @@ export const CharacterList = () => {
                             <tr>
                                 <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
-                                <td>{character.dateOfBirth.split("--")}</td>
+                                <td>{character.dateOfBirth}</td>
                                 <td>{character.mangaId}</td>
                             </tr>
                         ))
@@ -64,14 +47,13 @@ export const CharacterList = () => {
                             <tr>
                                 <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
-                                <td>{character.dateOfBirth.split("--")}</td>
+                                <td>{character.dateOfBirth}</td>
                                 <td>{character.mangaId}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-            <CharacterForm />
         </div>
     );
 }
