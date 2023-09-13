@@ -1,7 +1,8 @@
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
-import './Global.css';
-export const Characters = () => {
+import '../../Global.css';
+import { CharacterForm } from './CharacterForm';
+export const CharacterList = () => {
 
     const [characters, setCharacters] = useState([]);
 
@@ -25,11 +26,19 @@ export const Characters = () => {
         setSearchEntry(event.target.value);
     }
 
+    const [searchedName, setSearchedName] = useState("");
+
+    const searchCharacter = () => {
+        setSearchedName(searchEntry);
+    }
+
     return(
         <div>
             <p>Get Characters</p>
 
             <input type='text' onChange={handleSearch}></input>
+            <button onClick={searchCharacter}>Search</button>
+
             <div className='listDefault'>
                 <table>
                     <thead>
@@ -37,17 +46,18 @@ export const Characters = () => {
                             <th>Id</th>
                             <th>Name</th>
                             <th>Date Of Birth</th>
+                            <th>Manga</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {searchEntry 
-                        ? characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
-                        .map((character, index) => (
+                        {searchedName
+                        ? characters.filter((character) => searchedName.toLowerCase() === character.name.toLowerCase())
+                        .map((character) => (
                             <tr>
-                                <td key={index}>{character.id}</td>
+                                <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
                                 <td>{character.dateOfBirth.split("--")}</td>
-                                <br />
+                                <td>{character.mangaId}</td>
                             </tr>
                         ))
                             : characters.map((character) => (
@@ -55,12 +65,13 @@ export const Characters = () => {
                                 <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
                                 <td>{character.dateOfBirth.split("--")}</td>
-                                <br />
+                                <td>{character.mangaId}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <CharacterForm />
         </div>
     );
 }
