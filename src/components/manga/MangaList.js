@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import '../../Global.css';
-export const MangaList = ({ mangas }) => {
+import { MangaContext } from './Manga';
+export const MangaList = () => {
+
+    const {mangas} = useContext(MangaContext);
 
     const [searchEntry, setSearchEntry] = useState("");
     

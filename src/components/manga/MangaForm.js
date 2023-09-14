@@ -1,8 +1,11 @@
 import Axios from 'axios';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import '../../Global.css';
-export const MangaForm = ({ updateMangas }) => {
+import { MangaContext } from './Manga';
+export const MangaForm = () => {
     
+    const {updateMangas} = useContext(MangaContext);
+
     const [manga, setManga] = useState({name: "", releaseDate: "", synopsis: "", mangaStatus: ""});
     const handleManga = (event) => {
         const { name, value } = event.target;

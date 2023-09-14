@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import Axios from 'axios';
 import '../../Global.css';
 import { MangaList } from './MangaList';
 import { MangaForm } from './MangaForm';
+export const MangaContext = createContext();
 
 export const Manga = () => {
     const [mangas, setMangas] = useState([]);
@@ -21,18 +22,16 @@ export const Manga = () => {
     }
 
     const updateMangas = (newManga) => {
-        // Update the manga list in the parent component
         setMangas([...mangas, newManga]);
-        getMangas();
     }
 
     return (
         <div>
-            <p>Get Mangas</p>
-            {/* Render MangaList and pass the manga data as props */}
-            <MangaList mangas={mangas} />
-            {/* Render MangaForm and pass the update function as a prop */}
-            <MangaForm updateMangas={updateMangas} />
+            <MangaContext.Provider value={{mangas, updateMangas}}>
+                <p>Get Mangas</p>
+                <MangaList />
+                <MangaForm />
+            </MangaContext.Provider>
         </div>
     );
 }
