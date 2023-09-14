@@ -1,26 +1,20 @@
-import Axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import '../../Global.css';
-import { CharacterForm } from './CharacterForm';
-export const CharacterList = ({ characters }) => {
+import { CharacterContext } from './Character';
+export const CharacterList = () => {
+
+    const {characters} = useContext(CharacterContext);
 
     const [searchEntry, setSearchEntry] = useState("");
 
     const handleSearch = (event) => {
         setSearchEntry(event.target.value);
     }
-
-    const [searchedName, setSearchedName] = useState("");
-
-    const searchCharacter = () => {
-        setSearchedName(searchEntry);
-    }
     return(
         <div>
             <p>Get Characters</p>
 
             <input type='text' onChange={handleSearch}></input>
-            <button onClick={searchCharacter}>Search</button>
 
             <div className='listDefault'>
                 <table>
@@ -33,22 +27,22 @@ export const CharacterList = ({ characters }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {searchedName
-                        ? characters.filter((character) => searchedName.toLowerCase() === character.name.toLowerCase())
+                        {searchEntry
+                        ? characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
                         .map((character) => (
                             <tr>
                                 <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
-                                <td>{character.dateOfBirth}</td>
-                                <td>{character.mangaId}</td>
+                                <td>{character.dateOfBirth.split("--")}</td>
+                                <td>{character.manga.name}</td>
                             </tr>
                         ))
                             : characters.map((character) => (
                             <tr>
                                 <td key={character.id}>{character.id}</td>
                                 <td>{character.name}</td>
-                                <td>{character.dateOfBirth}</td>
-                                <td>{character.mangaId}</td>
+                                <td>{character.dateOfBirth.split("--")}</td>
+                                <td>{character.manga.name}</td>
                             </tr>
                         ))}
                     </tbody>

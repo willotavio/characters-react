@@ -1,7 +1,9 @@
 import Axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 import { CharacterList } from './CharacterList';
 import { CharacterForm } from './CharacterForm';
+
+export const CharacterContext = createContext();
 
 export const Character = () => {
     const [characters, setCharacters] = useState([]);
@@ -22,7 +24,7 @@ export const Character = () => {
 
     
 
-    const [characterAdd, setCharacterAdd] = useState({name: "", dateOfBirth: "", mangaId: ""});
+    /* const [characterAdd, setCharacterAdd] = useState({name: "", dateOfBirth: "", mangaId: ""});
     const handleCharacter = (event) => {
         const { name, value } = event.target;
         setCharacterAdd((prevCharacter) => ({
@@ -55,11 +57,13 @@ export const Character = () => {
         setCharacters([...characters, newCharacter]);
         getCharacters();
         getMangas();
-    }
+    } */
     return(
         <div>
-            <CharacterList characters={characters}/>
-            <CharacterForm handleCharacter={handleCharacter} handleMangaSelect={handleMangaSelect} characterAdd={characterAdd} mangas={mangas} updateCharacters={updateCharacters}/>
+            <CharacterContext.Provider value={{characters}}>
+                <CharacterList />
+                {/* <CharacterForm /> */}
+            </CharacterContext.Provider>
         </div>
     );
 }
