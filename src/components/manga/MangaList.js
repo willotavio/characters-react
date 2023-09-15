@@ -29,17 +29,17 @@ export const MangaList = () => {
                         {searchEntry 
                         ? mangas.filter((mangas) => (searchEntry.toLowerCase() === mangas.name.toLowerCase()))
                             .map((manga) => (
-                                <tr>
-                                    <td key={manga.id}>{manga.id}</td>
+                                <tr key={manga.id}>
+                                    <td>{manga.id}</td>
                                     <td>{manga.name}</td>
                                     <td>{manga.releaseDate}</td>
                                     <td>{manga.synopsis}</td>
                                     <td>{manga.mangaStatus}</td>
                                 </tr>
                             ))
-                                : mangas.map((manga) => (
-                                <tr>
-                                    <td key={manga.id}>{manga.id}</td>
+                                : mangas?.map((manga) => (
+                                <tr key={manga.id}>
+                                    <td>{manga.id}</td>
                                     <td>{manga.name}</td>
                                     <td>{manga.releaseDate}</td>
                                     <td>{manga.synopsis}</td>

@@ -27,23 +27,24 @@ export const CharacterList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {searchEntry
-                        ? characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
-                        .map((character) => (
-                            <tr>
-                                <td key={character.id}>{character.id}</td>
-                                <td>{character.name}</td>
-                                <td>{character.dateOfBirth.split("--")}</td>
-                                <td>{character.manga.name}</td>
-                            </tr>
-                        ))
+                        {
+                            searchEntry
+                            ? characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
+                            .map((character) => (
+                                <tr>
+                                    <td key={character.id}>{character.id}</td>
+                                    <td>{character.name}</td>
+                                    <td>{character.dateOfBirth?.split("--")}</td>
+                                    <td>{character.manga?.name}</td>
+                                </tr>
+                            ))
                             : characters.map((character) => (
-                            <tr>
-                                <td key={character.id}>{character.id}</td>
-                                <td>{character.name}</td>
-                                <td>{character.dateOfBirth.split("--")}</td>
-                                <td>{character.manga.name}</td>
-                            </tr>
+                                <tr>
+                                    <td key={character.id}>{character.id}</td>
+                                    <td>{character.name}</td>
+                                    <td>{character.dateOfBirth?.split("--")}</td>
+                                    <td>{character.manga?.name}</td>
+                                </tr>
                         ))}
                     </tbody>
                 </table>

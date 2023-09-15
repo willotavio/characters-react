@@ -1,8 +1,10 @@
 import Axios from 'axios';
 import '../../Global.css';
+import { useContext } from 'react';
+import { CharacterContext } from './Character';
 
-export const CharacterForm = ({ handleCharacter, handleMangaSelect, characterAdd, mangas, updateCharacters }) => {
-
+export const CharacterForm = () => {
+    const {mangas, characterAdd, handleCharacter, handleMangaSelect, updateCharacters} = useContext(CharacterContext);
     const createCharacter = async () => {
         let { name, dateOfBirth, mangaId } = characterAdd;
         let newCharacter = {name, dateOfBirth, mangaId};

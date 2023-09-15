@@ -4,7 +4,7 @@ import '../../Global.css';
 import { MangaContext } from './Manga';
 export const MangaForm = () => {
     
-    const {updateMangas} = useContext(MangaContext);
+    const {refetch} = useContext(MangaContext);
 
     const [manga, setManga] = useState({name: "", releaseDate: "", synopsis: "", mangaStatus: ""});
     const handleManga = (event) => {
@@ -23,7 +23,7 @@ export const MangaForm = () => {
 
         try {
             await Axios.post('http://localhost:8080/characters-api/manga', newManga, { headers: { 'Content-Type': 'application/json' } });
-            updateMangas(newManga);
+            refetch();
         } catch (err) {
             console.log(err);
         }

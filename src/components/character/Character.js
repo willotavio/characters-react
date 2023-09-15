@@ -1,30 +1,14 @@
 import Axios from 'axios';
-import { useEffect, useState, createContext } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import { CharacterList } from './CharacterList';
 import { CharacterForm } from './CharacterForm';
+import { AppContext } from '../App';
 
 export const CharacterContext = createContext();
 
 export const Character = () => {
-    const [characters, setCharacters] = useState([]);
-
-    useEffect(() => {
-        getCharacters();
-    }, []);
-
-    const getCharacters = async () => {
-        try{
-            const result = await Axios.get('http://localhost:8080/characters-api/character');
-            setCharacters(result.data);
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
-
-    
-
-    /* const [characterAdd, setCharacterAdd] = useState({name: "", dateOfBirth: "", mangaId: ""});
+    const { characters, setCharacters, getCharacters, mangas, setMangas, getMangas } = useContext(AppContext);
+    const [characterAdd, setCharacterAdd] = useState({name: "", dateOfBirth: "", mangaId: ""});
     const handleCharacter = (event) => {
         const { name, value } = event.target;
         setCharacterAdd((prevCharacter) => ({
@@ -32,20 +16,7 @@ export const Character = () => {
             [name]: value,
         }));
     }
-    const getMangas = async () => {
-        try{
-            const result = await Axios.get('http://localhost:8080/characters-api/manga');
-            setMangas(result.data);
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
-    const [mangas, setMangas] = useState([]);
-
-    useEffect(() => {
-        getMangas();
-    }, []);
+    
     const handleMangaSelect = (event) => {
         const mangaId = event.target.value;
         setCharacterAdd((prevCharacter) => ({
@@ -57,12 +28,12 @@ export const Character = () => {
         setCharacters([...characters, newCharacter]);
         getCharacters();
         getMangas();
-    } */
+    }
     return(
         <div>
-            <CharacterContext.Provider value={{characters}}>
+            <CharacterContext.Provider value={{characters, characterAdd, mangas, setMangas, handleCharacter, handleMangaSelect, updateCharacters}}>
                 <CharacterList />
-                {/* <CharacterForm /> */}
+                <CharacterForm />
             </CharacterContext.Provider>
         </div>
     );
