@@ -4,14 +4,13 @@ import { useContext } from 'react';
 import { CharacterContext } from './Character';
 
 export const CharacterForm = () => {
-    const {mangas, characterAdd, handleCharacter, handleMangaSelect, updateCharacters} = useContext(CharacterContext);
+    const {mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters} = useContext(CharacterContext);
+    
     const createCharacter = async () => {
-        let { name, dateOfBirth, mangaId } = characterAdd;
-        let newCharacter = {name, dateOfBirth, mangaId};
-        newCharacter = JSON.stringify(newCharacter);
+        let char = JSON.stringify(newCharacter);
         try{
-            await Axios.post('http://localhost:8080/characters-api/character', newCharacter, {headers: {'Content-Type': 'application/json'}});
-            updateCharacters(newCharacter);
+            await Axios.post('http://localhost:8080/characters-api/character', char, {headers: {'Content-Type': 'application/json'}});
+            refetchCharacters();
         }
         catch(err){
             console.log(err);
@@ -20,11 +19,11 @@ export const CharacterForm = () => {
 
     return(
         <div>
-            <input type="text" name="name" value={characterAdd.name} onChange={handleCharacter}></input>
-            <input type="text" name="dateOfBirth" value={characterAdd.dateOfBirth} onChange={handleCharacter}></input>
-            <select value={characterAdd.mangaId} onChange={handleMangaSelect}>
+            <input type="text" name="name" value={newCharacter.name} onChange={handleCharacter}></input>
+            <input type="text" name="dateOfBirth" value={newCharacter.dateOfBirth} onChange={handleCharacter}></input>
+            <select value={newCharacter.mangaId} onChange={handleMangaSelect}>
                 <option value="">Select an option</option>
-                {mangas.map((manga) => (
+                {mangas?.map((manga) => (
                     <option key={manga.id} value={manga.id}>{manga.name}</option>
                 ))}
             </select>

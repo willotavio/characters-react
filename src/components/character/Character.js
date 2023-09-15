@@ -3,15 +3,21 @@ import { useEffect, useState, createContext, useContext } from 'react';
 import { CharacterList } from './CharacterList';
 import { CharacterForm } from './CharacterForm';
 import { AppContext } from '../App';
+import { useQuery } from '@tanstack/react-query';
 
 export const CharacterContext = createContext();
 
 export const Character = () => {
-    const { characters, setCharacters, getCharacters, mangas, setMangas, getMangas } = useContext(AppContext);
-    const [characterAdd, setCharacterAdd] = useState({name: "", dateOfBirth: "", mangaId: ""});
+    const { data: characters, refetch: refetchCharacters } = useQuery(['characters'], async () => {
+        return Axios.get('http://localhost:8080/characters-api/character').then((res) => res.data).catch((err) => console.log(err));
+    });
+    const { data: mangas, refetch: refetchMangas } = useQuery(['mangas'], () => {
+        return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
+    });
+    const [newCharacter, setNewCharacter] = useState({name: "", dateOfBirth: "", mangaId: ""});
     const handleCharacter = (event) => {
         const { name, value } = event.target;
-        setCharacterAdd((prevCharacter) => ({
+        setNewCharacter((prevCharacter) => ({
             ...prevCharacter,
             [name]: value,
         }));
@@ -19,19 +25,15 @@ export const Character = () => {
     
     const handleMangaSelect = (event) => {
         const mangaId = event.target.value;
-        setCharacterAdd((prevCharacter) => ({
+        setNewCharacter((prevCharacter) => ({
             ...prevCharacter,
             mangaId: mangaId,
         }));
     }
-    const updateCharacters = (newCharacter) => {
-        setCharacters([...characters, newCharacter]);
-        getCharacters();
-        getMangas();
-    }
+    
     return(
         <div>
-            <CharacterContext.Provider value={{characters, characterAdd, mangas, setMangas, handleCharacter, handleMangaSelect, updateCharacters}}>
+            <CharacterContext.Provider value={{characters, mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters}}>
                 <CharacterList />
                 <CharacterForm />
             </CharacterContext.Provider>

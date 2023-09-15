@@ -1,10 +1,10 @@
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import '../../Global.css';
 import { CharacterContext } from './Character';
 export const CharacterList = () => {
 
     const {characters} = useContext(CharacterContext);
-
+    
     const [searchEntry, setSearchEntry] = useState("");
 
     const handleSearch = (event) => {
@@ -29,18 +29,18 @@ export const CharacterList = () => {
                     <tbody>
                         {
                             searchEntry
-                            ? characters.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
+                            ? characters?.filter((character) => searchEntry.toLowerCase() === character.name.toLowerCase())
                             .map((character) => (
-                                <tr>
-                                    <td key={character.id}>{character.id}</td>
+                                <tr key={character.id}>
+                                    <td>{character.id}</td>
                                     <td>{character.name}</td>
                                     <td>{character.dateOfBirth?.split("--")}</td>
                                     <td>{character.manga?.name}</td>
                                 </tr>
                             ))
-                            : characters.map((character) => (
-                                <tr>
-                                    <td key={character.id}>{character.id}</td>
+                            : characters?.map((character) => (
+                                <tr key={character.id}>
+                                    <td>{character.id}</td>
                                     <td>{character.name}</td>
                                     <td>{character.dateOfBirth?.split("--")}</td>
                                     <td>{character.manga?.name}</td>

@@ -9,13 +9,12 @@ export const MangaContext = createContext();
 
 export const Manga = () => {
     const { data: mangas, refetch } = useQuery(['mangas'], () => {
-        return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data);
+        return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
     });
 
     return (
         <div>
             <MangaContext.Provider value={{mangas, refetch}}>
-                <p>Get Mangas</p>
                 <MangaList />
                 <MangaForm />
             </MangaContext.Provider>

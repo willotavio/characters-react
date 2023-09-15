@@ -13,7 +13,10 @@ export const MangaList = () => {
 
     return(
         <div>
+            <p>Get Mangas</p>
+
             <input type='text' onChange={handleSearch}></input>
+            
             <div className='listDefault'>
                 <table>
                     <thead>
@@ -27,7 +30,7 @@ export const MangaList = () => {
                     </thead>
                     <tbody>
                         {searchEntry 
-                        ? mangas.filter((mangas) => (searchEntry.toLowerCase() === mangas.name.toLowerCase()))
+                        ? mangas.filter((manga) => (searchEntry.toLowerCase() === manga.name.toLowerCase()))
                             .map((manga) => (
                                 <tr key={manga.id}>
                                     <td>{manga.id}</td>
