@@ -3,7 +3,7 @@ import '../../Global.css';
 import { MangaContext } from './Manga';
 export const MangaList = () => {
 
-    const {mangas} = useContext(MangaContext);
+    const {mangas, deleteManga} = useContext(MangaContext);
 
     const [searchEntry, setSearchEntry] = useState("");
     
@@ -26,6 +26,7 @@ export const MangaList = () => {
                             <th>Release Date</th>
                             <th>Synopsis</th>
                             <th>Manga Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,7 @@ export const MangaList = () => {
                                     <td>{manga.releaseDate}</td>
                                     <td>{manga.synopsis}</td>
                                     <td>{manga.mangaStatus}</td>
+                                    <td><button onClick={() => deleteManga(manga.id)}>Delete</button></td>
                                 </tr>
                             ))
                                 : mangas?.map((manga) => (
@@ -47,6 +49,7 @@ export const MangaList = () => {
                                     <td>{manga.releaseDate}</td>
                                     <td>{manga.synopsis}</td>
                                     <td>{manga.mangaStatus}</td>
+                                    <td><button onClick={() => deleteManga(manga.id)}>Delete</button></td>
                                 </tr>
                             ))
                         }

@@ -31,9 +31,19 @@ export const Character = () => {
         }));
     }
     
+    const deleteCharacter = async (characterId) => {
+        try{
+            await Axios.delete(`http://localhost:8080/characters-api/character/${characterId}`)
+            refetchCharacters();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     return(
         <div>
-            <CharacterContext.Provider value={{characters, mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters}}>
+            <CharacterContext.Provider value={{characters, mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters, deleteCharacter}}>
                 <CharacterList />
                 <CharacterForm />
             </CharacterContext.Provider>

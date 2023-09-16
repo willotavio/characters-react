@@ -8,13 +8,23 @@ import { useQuery } from '@tanstack/react-query';
 export const MangaContext = createContext();
 
 export const Manga = () => {
-    const { data: mangas, refetch } = useQuery(['mangas'], () => {
+    const { data: mangas, refetch: refetchMangas } = useQuery(['mangas'], () => {
         return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
     });
 
+    const deleteManga = async (mangaId) => {
+        try{
+            await Axios.delete(`http://localhost:8080/characters-api/manga/${mangaId}`);
+            refetchMangas();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     return (
         <div>
-            <MangaContext.Provider value={{mangas, refetch}}>
+            <MangaContext.Provider value={{mangas, refetchMangas, deleteManga}}>
                 <MangaList />
                 <MangaForm />
             </MangaContext.Provider>
