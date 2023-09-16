@@ -1,10 +1,10 @@
 import Axios from 'axios';
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, createContext } from 'react';
 import '../../Global.css';
 import { MangaList } from './MangaList';
-import { MangaForm } from './MangaForm';
-import { AppContext } from '../App';
+import { MangaAddForm } from './MangaAddForm';
 import { useQuery } from '@tanstack/react-query';
+import { MangaUpdateForm } from './MangaUpdateForm';
 export const MangaContext = createContext();
 
 export const Manga = () => {
@@ -22,11 +22,45 @@ export const Manga = () => {
         }
     }
 
+    const [selectedManga, setSelectedManga] = useState({});
+    const editManga = (mangaId) => {
+        let result = mangas.filter((manga) => manga.id === mangaId)[0];
+        const updatedManga = {
+            id: result.id,
+            name: result.name,
+            releaseDate: result.releaseDate,
+            synopsis: result.synopsis,
+            mangaStatus: result.mangaStatus
+        }
+        switch(updatedManga.mangaStatus){
+            case "ON_GOING":
+                updatedManga.mangaStatus = 1;
+                break;
+            case "FINISHED":
+                updatedManga.mangaStatus = 2;
+                break;
+            case "CANCELED":
+                updatedManga.mangaStatus = 3;
+                break;
+        }
+        setSelectedManga(updatedManga);
+    }
+    const updateManga = async (mangaId, manga) => {
+        try{
+            await Axios.put(`http://localhost:8080/characters-api/manga/${mangaId}`, manga, {headers: {'Content-Type': 'application/json'}});
+            refetchMangas();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     return (
         <div>
-            <MangaContext.Provider value={{mangas, refetchMangas, deleteManga}}>
+            <MangaContext.Provider value={{mangas, refetchMangas, editManga, deleteManga}}>
                 <MangaList />
-                <MangaForm />
+                <MangaAddForm />
+                <MangaUpdateForm selectedManga={selectedManga} setSelectedManga={setSelectedManga} updateManga={updateManga}/>
             </MangaContext.Provider>
         </div>
     );

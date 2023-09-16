@@ -1,10 +1,10 @@
-import Axios from 'axios';
 import '../App.css';
 import { Character } from './character/Character';
 import { Manga } from './manga/Manga';
-import { useState, useEffect, createContext } from 'react';
+import { createContext } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navbar } from './Navbar';
 
 export const AppContext = createContext();
 
@@ -22,6 +22,7 @@ function App() {
       <QueryClientProvider client={client}>
         <AppContext.Provider value={{}}>
           <Router>
+            <Navbar />
             <Routes>
               <Route path='/' element={<h1>HOME PAGE</h1>}></Route>
               <Route path='/mangas' element={<Manga />}></Route>

@@ -3,7 +3,7 @@ import '../../Global.css';
 import { useContext } from 'react';
 import { CharacterContext } from './Character';
 
-export const CharacterForm = () => {
+export const CharacterAddForm = () => {
     const {mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters} = useContext(CharacterContext);
     
     const createCharacter = async () => {

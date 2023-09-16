@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { useState, useContext } from 'react';
 import '../../Global.css';
 import { MangaContext } from './Manga';
-export const MangaForm = () => {
+export const MangaAddForm = () => {
     
     const {refetchMangas} = useContext(MangaContext);
 
@@ -28,13 +28,22 @@ export const MangaForm = () => {
             console.log(err);
         }
     }
+    const clearInputs = () => {
+        setManga({
+            name: "",
+            releaseDate: "",
+            synopsis: "",
+            mangaStatus: ""
+        });
+    }
     return(
         <div>
+            <p>Add</p>
             <input type="text" name="name" value={manga.name} onChange={handleManga}></input>
                 <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga}></input>
                 <input type="text" name="synopsis" value={manga.synopsis} onChange={handleManga}></input>
                 <input type="number" name="mangaStatus" value={manga.mangaStatus} onChange={handleManga}></input>
-                <button onClick={createManga}>Submit</button>
+                <button onClick={() => {createManga(); clearInputs()}}>Submit</button>
         </div>
     );
 }

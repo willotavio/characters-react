@@ -1,9 +1,9 @@
 import Axios from 'axios';
-import { useEffect, useState, createContext, useContext } from 'react';
+import { useState, createContext } from 'react';
 import { CharacterList } from './CharacterList';
-import { CharacterForm } from './CharacterForm';
-import { AppContext } from '../App';
+import { CharacterAddForm } from './CharacterAddForm';
 import { useQuery } from '@tanstack/react-query';
+import '../../Global.css';
 
 export const CharacterContext = createContext();
 
@@ -45,7 +45,7 @@ export const Character = () => {
         <div>
             <CharacterContext.Provider value={{characters, mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters, deleteCharacter}}>
                 <CharacterList />
-                <CharacterForm />
+                <CharacterAddForm />
             </CharacterContext.Provider>
         </div>
     );
