@@ -3,7 +3,7 @@ import '../../Global.css';
 import { CharacterContext } from './Character';
 export const CharacterList = () => {
 
-    const {characters, deleteCharacter} = useContext(CharacterContext);
+    const {characters, editCharacter, deleteCharacter} = useContext(CharacterContext);
     
     const [searchEntry, setSearchEntry] = useState("");
 
@@ -37,7 +37,10 @@ export const CharacterList = () => {
                                     <td>{character.name}</td>
                                     <td>{character.dateOfBirth?.split("--")}</td>
                                     <td>{character.manga?.name}</td>
-                                    <td><button onClick={() => deleteCharacter(character.id)}>Delete</button></td>
+                                    <td>
+                                        <button onClick={() => editCharacter(character.id)}>Edit</button>
+                                        <button onClick={() => deleteCharacter(character.id)}>Delete</button>
+                                    </td>
                                 </tr>
                             ))
                             : characters?.map((character) => (
@@ -46,7 +49,10 @@ export const CharacterList = () => {
                                     <td>{character.name}</td>
                                     <td>{character.dateOfBirth?.split("--")}</td>
                                     <td>{character.manga?.name}</td>
-                                    <td><button onClick={() => deleteCharacter(character.id)}>Delete</button></td>
+                                    <td>
+                                        <button onClick={() => editCharacter(character.id)}>Edit</button>
+                                        <button onClick={() => deleteCharacter(character.id)}>Delete</button>
+                                    </td>
                                 </tr>
                         ))}
                     </tbody>

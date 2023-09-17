@@ -12,6 +12,7 @@ export const Navbar = () => {
                         text-decoration: none;
                         color: white;
                         font-size: 20px;
+                        padding-right: 1rem;
                     }
                     .navbar *:hover{
                         opacity: 80%;
@@ -19,7 +20,7 @@ export const Navbar = () => {
                 `}
             </style>
             <div className="navbar">
-                <Link to={'/mangas'}>Mangas | </Link>
+                <Link to={'/mangas'}>Mangas</Link>
                 <Link to={'/characters'}>Characters</Link>
             </div>
         </>

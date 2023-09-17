@@ -4,6 +4,7 @@ import { CharacterList } from './CharacterList';
 import { CharacterAddForm } from './CharacterAddForm';
 import { useQuery } from '@tanstack/react-query';
 import '../../Global.css';
+import { CharacterUpdateForm } from './CharacterUpdateForm';
 
 export const CharacterContext = createContext();
 
@@ -14,26 +15,34 @@ export const Character = () => {
     const { data: mangas, refetch: refetchMangas } = useQuery(['mangas'], () => {
         return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
     });
-    const [newCharacter, setNewCharacter] = useState({name: "", dateOfBirth: "", mangaId: ""});
-    const handleCharacter = (event) => {
-        const { name, value } = event.target;
-        setNewCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            [name]: value,
-        }));
-    }
-    
-    const handleMangaSelect = (event) => {
-        const mangaId = event.target.value;
-        setNewCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            mangaId: mangaId,
-        }));
-    }
     
     const deleteCharacter = async (characterId) => {
         try{
-            await Axios.delete(`http://localhost:8080/characters-api/character/${characterId}`)
+            await Axios.delete(`http://localhost:8080/characters-api/character/${characterId}`);
+            refetchCharacters();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    
+
+    const [selectedCharacter, setSelectedCharacter] = useState();
+    const editCharacter = async (characterId) => {
+        let result = characters.filter((character) => character.id === characterId)[0];
+        const updatedCharacter = {
+            id: result.id,
+            name: result.name,
+            dateOfBirth: result.dateOfBirth.split("--")[1],
+            mangaId: result.manga?.id
+        };
+        setSelectedCharacter(updatedCharacter);
+    }
+
+    const updateCharacter = async (characterId, character) => {
+        try{
+            await Axios.put(`http://localhost:8080/characters-api/character/${characterId}`, character, {headers: {'Content-Type': 'application/json'}});
             refetchCharacters();
         }
         catch(err){
@@ -43,9 +52,10 @@ export const Character = () => {
 
     return(
         <div>
-            <CharacterContext.Provider value={{characters, mangas, newCharacter, handleCharacter, handleMangaSelect, refetchCharacters, deleteCharacter}}>
+            <CharacterContext.Provider value={{characters, mangas, refetchCharacters, editCharacter, deleteCharacter}}>
                 <CharacterList />
                 <CharacterAddForm />
+                <CharacterUpdateForm  selectedCharacter={selectedCharacter} setSelectedCharacter={setSelectedCharacter} updateCharacter={updateCharacter}/>
             </CharacterContext.Provider>
         </div>
     );
