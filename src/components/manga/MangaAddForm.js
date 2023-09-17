@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import '../../Global.css';
 import { MangaContext } from './Manga';
 export const MangaAddForm = () => {

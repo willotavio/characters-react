@@ -1,44 +1,44 @@
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export const MangaUpdateForm = (props) => {
-    const { selectedManga, setSelectedManga, updateManga } = props;
-    const [manga, setManga] = useState({name: "", releaseDate: "", synopsis: "", mangaStatus: ""});
-    
+    const { selectedManga, updateManga } = props;
+
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        releaseDate: yup.string().matches(
+            /^(?:19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+            'Invalid date format. Use yyyy-MM-dd'
+          ).required(),
+        synopsis: yup.string().required(),
+        mangaStatus: yup.number().integer().min(1).max(3).required()
+    });
+    const {register, handleSubmit, reset, setValue} = useForm({
+        resolver: yupResolver(schema)
+    });
     useEffect(() => {
-        if(selectedManga){
-            setManga({
-                name: selectedManga.name || "",
-                releaseDate: selectedManga.releaseDate || "",
-                synopsis: selectedManga.synopsis || "",
-                mangaStatus: selectedManga.mangaStatus || ""
-            })
-        }
-    }, [selectedManga]);
-
-    const handleManga = (event) => {
-        const { name, value } = event.target;
-        setManga((prevManga) => ({
-            ...prevManga,
-            [name]: value,
-        }));
+        setValue("name", selectedManga.name);
+        setValue("releaseDate", selectedManga.releaseDate);
+        setValue("synopsis", selectedManga.synopsis);
+        setValue("mangaStatus", selectedManga.mangaStatus);
+    }, [selectedManga])
+    const onSubmit = async (data) => {
+        await updateManga(selectedManga.id, data);
+        reset();
     }
 
-    const clearInputs = () => {
-        setManga({
-            name: "",
-            releaseDate: "",
-            synopsis: "",
-            mangaStatus: ""
-        });
-    }
     return(
         <div>
             <p>Update</p>
-            <input type="text" name="name" value={manga.name} onChange={handleManga} placeholder='Name'></input>
-            <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga} placeholder='Release Date'></input>
-            <input type="text" name="synopsis" value={manga.synopsis} onChange={handleManga} placeholder='Synopsis'></input>
-            <input type="number" name="mangaStatus" value={manga.mangaStatus} onChange={handleManga} placeholder='Status'></input>
-            <button onClick={() => {updateManga(selectedManga.id, manga); clearInputs()}}>Update</button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" name="name" {...register("name")} placeholder='Name'></input>
+                <input type="date" name="releaseDate" {...register("releaseDate")} placeholder='Release Date'></input>
+                <input type="text" name="synopsis" {...register("synopsis")} placeholder='Synopsis'></input>
+                <input type="number" name="mangaStatus" {...register("mangaStatus")} placeholder='Status'></input>
+                <input type="submit" value={"Update"}></input>
+            </form>
         </div>
     );
     
