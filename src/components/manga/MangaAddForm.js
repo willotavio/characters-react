@@ -48,7 +48,12 @@ export const MangaAddForm = () => {
                 <input type="text" name="name" {...register("name")} placeholder='Name'></input>
                 <input type="date" name="releaseDate" {...register("releaseDate")} placeholder='Release Date'></input>
                 <input type="text" name="synopsis" {...register("synopsis")} placeholder='Synopsis'></input>
-                <input type="number" name="mangaStatus" {...register("mangaStatus")} placeholder='Status'></input>
+                <select {...register("mangaStatus")}>
+                    <option value="">Select an option</option>
+                    <option value={1}>On Going</option>
+                    <option value={2}>Finished</option>
+                    <option value={3}>Canceled</option>
+                </select>
                 <input type="submit" value={"Submit"}></input>
             </form>
         </div>

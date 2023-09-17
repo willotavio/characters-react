@@ -35,6 +35,7 @@ export const CharacterAddForm = () => {
 
     return(
         <div>
+            <p>Add</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" name="name" {...register("name")} placeholder='Name'></input>
                 <input type="text" name="dateOfBirth" {...register("dateOfBirth")} placeholder='Date of Birth'></input>

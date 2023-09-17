@@ -11,7 +11,7 @@ export const CharacterUpdateForm = (props) => {
     const schema = yup.object().shape({
         name: yup.string().required(),
         dateOfBirth: yup.string().matches(/^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, 'Invalid date format. Use MM-dd').required(),
-        mangaId: yup.string().required()
+        mangaId: yup.string().uuid().required()
     });
     const {register, handleSubmit, reset, setValue, control} = useForm({
         resolver: yupResolver(schema)
@@ -22,13 +22,15 @@ export const CharacterUpdateForm = (props) => {
         setValue("mangaId", selectedCharacter.mangaId);
     }, [selectedCharacter]);
     const onSubmit = async (data) => {
-        console.log(data);
-        await updateCharacter(selectedCharacter.id, data);
-        reset();
+        if(selectedCharacter.id){
+            await updateCharacter(selectedCharacter.id, data);
+            reset();
+        }
     }
 
     return(
         <div>
+            <p>Update</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" name="name" {...register("name")} placeholder="Name"></input>
                 <input type="text" name="dateOfBirth" {...register("dateOfBirth")} placeholder="Date of Birth"></input>
@@ -37,7 +39,7 @@ export const CharacterUpdateForm = (props) => {
                     control={control}
                     render={({ field }) => (
                         <select {...field}>
-                            <option>Select an option</option>
+                            <option value={""}>Select an option</option>
                             {mangas?.map((manga) => (
                                 <option key={manga.id} value={manga.id}>
                                     {manga.name}

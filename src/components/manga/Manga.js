@@ -48,6 +48,7 @@ export const Manga = () => {
     const updateManga = async (mangaId, manga) => {
         try{
             await Axios.put(`http://localhost:8080/characters-api/manga/${mangaId}`, manga, {headers: {'Content-Type': 'application/json'}});
+            setSelectedManga({});
             refetchMangas();
         }
         catch(err){
@@ -60,7 +61,7 @@ export const Manga = () => {
             <MangaContext.Provider value={{mangas, refetchMangas, editManga, deleteManga}}>
                 <MangaList />
                 <MangaAddForm />
-                <MangaUpdateForm selectedManga={selectedManga} setSelectedManga={setSelectedManga} updateManga={updateManga}/>
+                {selectedManga.name && <MangaUpdateForm selectedManga={selectedManga} setSelectedManga={setSelectedManga} updateManga={updateManga}/>}
             </MangaContext.Provider>
         </div>
     );

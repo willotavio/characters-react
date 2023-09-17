@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -15,7 +15,7 @@ export const MangaUpdateForm = (props) => {
         synopsis: yup.string().required(),
         mangaStatus: yup.number().integer().min(1).max(3).required()
     });
-    const {register, handleSubmit, reset, setValue} = useForm({
+    const {register, handleSubmit, reset, setValue, control} = useForm({
         resolver: yupResolver(schema)
     });
     useEffect(() => {
@@ -25,8 +25,10 @@ export const MangaUpdateForm = (props) => {
         setValue("mangaStatus", selectedManga.mangaStatus);
     }, [selectedManga]);
     const onSubmit = async (data) => {
-        await updateManga(selectedManga.id, data);
-        reset();
+        if(selectedManga.id){
+            await updateManga(selectedManga.id, data);
+            reset();
+        }
     }
 
     return(
@@ -36,7 +38,18 @@ export const MangaUpdateForm = (props) => {
                 <input type="text" name="name" {...register("name")} placeholder='Name'></input>
                 <input type="date" name="releaseDate" {...register("releaseDate")} placeholder='Release Date'></input>
                 <input type="text" name="synopsis" {...register("synopsis")} placeholder='Synopsis'></input>
-                <input type="number" name="mangaStatus" {...register("mangaStatus")} placeholder='Status'></input>
+                <Controller 
+                    name="mangaStatus"
+                    control={control}
+                    render={({field}) => (
+                        <select {...field}>
+                            <option value="">Select an option</option>
+                            <option value={1}>On Going</option>
+                            <option value={2}>Finished</option>
+                            <option value={3}>Canceled</option>
+                        </select>
+                    )}
+                />
                 <input type="submit" value={"Update"}></input>
             </form>
         </div>

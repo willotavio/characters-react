@@ -43,6 +43,7 @@ export const Character = () => {
     const updateCharacter = async (characterId, character) => {
         try{
             await Axios.put(`http://localhost:8080/characters-api/character/${characterId}`, character, {headers: {'Content-Type': 'application/json'}});
+            setSelectedCharacter({});
             refetchCharacters();
         }
         catch(err){
@@ -55,7 +56,7 @@ export const Character = () => {
             <CharacterContext.Provider value={{characters, mangas, refetchCharacters, editCharacter, deleteCharacter}}>
                 <CharacterList />
                 <CharacterAddForm />
-                <CharacterUpdateForm  selectedCharacter={selectedCharacter} setSelectedCharacter={setSelectedCharacter} updateCharacter={updateCharacter}/>
+                {selectedCharacter.name && <CharacterUpdateForm  selectedCharacter={selectedCharacter} setSelectedCharacter={setSelectedCharacter} updateCharacter={updateCharacter}/>}
             </CharacterContext.Provider>
         </div>
     );
