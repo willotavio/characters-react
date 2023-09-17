@@ -1,54 +1,55 @@
 import { useContext, useEffect, useState } from "react";
 import { CharacterContext } from "./Character";
+import { useForm, Controller } from "react-hook-form";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export const CharacterUpdateForm = (props) => {
     const {mangas} = useContext(CharacterContext);
-    const {selectedCharacter, setSelectedCharacter, updateCharacter} = props;
-    
-    const [character, setCharacter] = useState({name: "", dateOfBirth: "", mangaId: ""});
-    useEffect(() => {
-        if(selectedCharacter){
-            setCharacter({
-                name: selectedCharacter.name || "",
-                dateOfBirth: selectedCharacter.dateOfBirth || "",
-                mangaId: selectedCharacter.mangaId || ""
-            });
-        }
-    }, [selectedCharacter]);
-    const handleCharacter = (event) => {
-        const {name, value} = event.target;
-        setCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            [name]: value,
-        }));
-    }
-    const handleMangaSelect = (event) => {
-        const mangaId = event.target.value;
-        setCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            mangaId: mangaId,
-        }));
-    }
+    const {selectedCharacter, updateCharacter} = props;
 
-    const clearInputs = () => {
-        setCharacter({
-            name: "",
-            dateOfBirth: "",
-            mangaId: ""
-        });
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        dateOfBirth: yup.string().matches(/^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, 'Invalid date format. Use MM-dd').required(),
+        mangaId: yup.string().required()
+    });
+    const {register, handleSubmit, reset, setValue, control} = useForm({
+        resolver: yupResolver(schema)
+    });
+    useEffect(() => {
+        setValue("name", selectedCharacter.name);
+        setValue("dateOfBirth", selectedCharacter.dateOfBirth);
+        setValue("mangaId", selectedCharacter.mangaId);
+    }, [selectedCharacter]);
+    const onSubmit = async (data) => {
+        console.log(data);
+        await updateCharacter(selectedCharacter.id, data);
+        reset();
     }
 
     return(
         <div>
-            <input type="text" name="name" value={character.name} onChange={handleCharacter}></input>
-            <input type="text" name="dateOfBirth" value={character.dateOfBirth} onChange={handleCharacter}></input>
-            <select value={character.mangaId} onChange={handleMangaSelect}>
-                <option value="">Select an option</option>
-                {mangas?.map((manga) => (
-                    <option key={manga.id} value={manga.id}>{manga.name}</option>
-                ))}
-            </select>
-            <button onClick={() => {updateCharacter(selectedCharacter.id, character); clearInputs()}}>Update</button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" name="name" {...register("name")} placeholder="Name"></input>
+                <input type="text" name="dateOfBirth" {...register("dateOfBirth")} placeholder="Date of Birth"></input>
+                <Controller 
+                    name="mangaId"
+                    control={control}
+                    render={({ field }) => (
+                        <select {...field}>
+                            <option>Select an option</option>
+                            {mangas?.map((manga) => (
+                                <option key={manga.id} value={manga.id}>
+                                    {manga.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                />
+                <input type="submit" value={"Update"}></input>
+                
+            </form>
+            
         </div>
     );
 }

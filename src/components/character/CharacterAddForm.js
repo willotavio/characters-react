@@ -1,28 +1,15 @@
 import Axios from 'axios';
 import '../../Global.css';
 import { useState, useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { CharacterContext } from './Character';
 
 export const CharacterAddForm = () => {
     const {mangas, refetchCharacters} = useContext(CharacterContext);
-    
-    const [character, setCharacter] = useState({name: "", dateOfBirth: "", mangaId: ""});
-    const handleCharacter = (event) => {
-        const { name, value } = event.target;
-        setCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            [name]: value,
-        }));
-    }
-    
-    const handleMangaSelect = (event) => {
-        const mangaId = event.target.value;
-        setCharacter((prevCharacter) => ({
-            ...prevCharacter,
-            mangaId: mangaId,
-        }));
-    }
-    const createCharacter = async () => {
+
+    const createCharacter = async (character) => {
         let char = JSON.stringify(character);
         try{
             await Axios.post('http://localhost:8080/characters-api/character', char, {headers: {'Content-Type': 'application/json'}});
@@ -33,25 +20,32 @@ export const CharacterAddForm = () => {
         }
     }
 
-    const clearInputs = () => {
-        setCharacter({
-            name: "",
-            dateOfBirth: "",
-            mangaId: ""
-        });
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        dateOfBirth: yup.string().matches(/^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, 'Invalid date format. Use MM-dd').required(),
+        mangaId: yup.string().required()
+    });
+    const {register, handleSubmit, reset} = useForm({
+        resolver: yupResolver(schema)
+    })
+    const onSubmit = async (data) => {
+        await createCharacter(data);
+        reset();
     }
 
     return(
         <div>
-            <input type="text" name="name" value={character.name} onChange={handleCharacter}></input>
-            <input type="text" name="dateOfBirth" value={character.dateOfBirth} onChange={handleCharacter}></input>
-            <select value={character.mangaId} onChange={handleMangaSelect}>
-                <option value="">Select an option</option>
-                {mangas?.map((manga) => (
-                    <option key={manga.id} value={manga.id}>{manga.name}</option>
-                ))}
-            </select>
-            <button onClick={() => {createCharacter(); clearInputs()}}>Submit</button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" name="name" {...register("name")} placeholder='Name'></input>
+                <input type="text" name="dateOfBirth" {...register("dateOfBirth")} placeholder='Date of Birth'></input>
+                <select {...register("mangaId")}>
+                    <option value="">Select an option</option>
+                    {mangas?.map((manga) => (
+                        <option key={manga.id} value={manga.id}>{manga.name}</option>
+                    ))}
+                </select>
+                <input type="submit" value={"Submit"}></input>    
+            </form>
         </div>
     );
 }

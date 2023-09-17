@@ -23,7 +23,7 @@ export const MangaUpdateForm = (props) => {
         setValue("releaseDate", selectedManga.releaseDate);
         setValue("synopsis", selectedManga.synopsis);
         setValue("mangaStatus", selectedManga.mangaStatus);
-    }, [selectedManga])
+    }, [selectedManga]);
     const onSubmit = async (data) => {
         await updateManga(selectedManga.id, data);
         reset();

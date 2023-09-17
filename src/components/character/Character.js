@@ -28,7 +28,7 @@ export const Character = () => {
 
     
 
-    const [selectedCharacter, setSelectedCharacter] = useState();
+    const [selectedCharacter, setSelectedCharacter] = useState({});
     const editCharacter = async (characterId) => {
         let result = characters.filter((character) => character.id === characterId)[0];
         const updatedCharacter = {
