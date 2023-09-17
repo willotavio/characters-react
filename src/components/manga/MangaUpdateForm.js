@@ -34,10 +34,10 @@ export const MangaUpdateForm = (props) => {
     return(
         <div>
             <p>Update</p>
-            <input type="text" name="name" value={manga.name} onChange={handleManga}></input>
-            <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga}></input>
-            <input type="text" name="synopsis" value={manga.synopsis} onChange={handleManga}></input>
-            <input type="number" name="mangaStatus" value={manga.mangaStatus} onChange={handleManga}></input>
+            <input type="text" name="name" value={manga.name} onChange={handleManga} placeholder='Name'></input>
+            <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga} placeholder='Release Date'></input>
+            <input type="text" name="synopsis" value={manga.synopsis} onChange={handleManga} placeholder='Synopsis'></input>
+            <input type="number" name="mangaStatus" value={manga.mangaStatus} onChange={handleManga} placeholder='Status'></input>
             <button onClick={() => {updateManga(selectedManga.id, manga); clearInputs()}}>Update</button>
         </div>
     );

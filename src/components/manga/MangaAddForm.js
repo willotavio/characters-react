@@ -1,20 +1,15 @@
 import Axios from 'axios';
 import { useState, useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 import '../../Global.css';
 import { MangaContext } from './Manga';
 export const MangaAddForm = () => {
     
     const {refetchMangas} = useContext(MangaContext);
 
-    const [manga, setManga] = useState({name: "", releaseDate: "", synopsis: "", mangaStatus: ""});
-    const handleManga = (event) => {
-        const { name, value } = event.target;
-        setManga((prevManga) => ({
-            ...prevManga,
-            [name]: value,
-        }));
-    }
-    const createManga = async () => {
+    const createManga = async (manga) => {
         let { name, releaseDate, synopsis, mangaStatus } = manga;
         releaseDate = "" + releaseDate;
         mangaStatus = "" + mangaStatus;
@@ -28,22 +23,34 @@ export const MangaAddForm = () => {
             console.log(err);
         }
     }
-    const clearInputs = () => {
-        setManga({
-            name: "",
-            releaseDate: "",
-            synopsis: "",
-            mangaStatus: ""
-        });
+    
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        releaseDate: yup.string().matches(
+            /^(?:19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+            'Invalid date format. Use yyyy-MM-dd'
+          ).required(),
+        synopsis: yup.string().required(),
+        mangaStatus: yup.number().integer().min(1).max(3).required()
+    });
+    const {register, handleSubmit, reset} = useForm({
+        resolver: yupResolver(schema)
+    });
+    const onSubmit = async (data) => {
+        await createManga(data);
+        reset();
     }
+
     return(
         <div>
             <p>Add</p>
-            <input type="text" name="name" value={manga.name} onChange={handleManga}></input>
-                <input type="date" name="releaseDate" value={manga.releaseDate} onChange={handleManga}></input>
-                <input type="text" name="synopsis" value={manga.synopsis} onChange={handleManga}></input>
-                <input type="number" name="mangaStatus" value={manga.mangaStatus} onChange={handleManga}></input>
-                <button onClick={() => {createManga(); clearInputs()}}>Submit</button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" name="name" {...register("name")} placeholder='Name'></input>
+                <input type="date" name="releaseDate" {...register("releaseDate")} placeholder='Release Date'></input>
+                <input type="text" name="synopsis" {...register("synopsis")} placeholder='Synopsis'></input>
+                <input type="number" name="mangaStatus" {...register("mangaStatus")} placeholder='Status'></input>
+                <input type="submit" value={"Submit"}></input>
+            </form>
         </div>
     );
 }
