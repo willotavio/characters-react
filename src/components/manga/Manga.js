@@ -12,6 +12,21 @@ export const Manga = () => {
         return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
     });
 
+    const addManga = async (manga) => {
+        let { name, releaseDate, synopsis, mangaStatus } = manga;
+        releaseDate = "" + releaseDate;
+        mangaStatus = "" + mangaStatus;
+        let newManga = { name, releaseDate, synopsis, mangaStatus };
+        newManga = JSON.stringify(newManga);
+
+        try {
+            await Axios.post('http://localhost:8080/characters-api/manga', newManga, { headers: { 'Content-Type': 'application/json' } });
+            refetchMangas();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const deleteManga = async (mangaId) => {
         try{
             await Axios.delete(`http://localhost:8080/characters-api/manga/${mangaId}`);
@@ -58,7 +73,7 @@ export const Manga = () => {
 
     return (
         <div>
-            <MangaContext.Provider value={{mangas, refetchMangas, editManga, deleteManga}}>
+            <MangaContext.Provider value={{mangas, addManga, editManga, deleteManga}}>
                 <MangaList />
                 <MangaAddForm />
                 {selectedManga.name && <MangaUpdateForm selectedManga={selectedManga} setSelectedManga={setSelectedManga} updateManga={updateManga}/>}

@@ -16,6 +16,18 @@ export const Character = () => {
         return Axios.get('http://localhost:8080/characters-api/manga').then((res) => res.data).catch((err) => console.log(err));
     });
     
+    
+    const addCharacter = async (character) => {
+        let char = JSON.stringify(character);
+        try{
+            await Axios.post('http://localhost:8080/characters-api/character', char, {headers: {'Content-Type': 'application/json'}});
+            refetchCharacters();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     const deleteCharacter = async (characterId) => {
         try{
             await Axios.delete(`http://localhost:8080/characters-api/character/${characterId}`);
@@ -25,8 +37,6 @@ export const Character = () => {
             console.log(err);
         }
     }
-
-    
 
     const [selectedCharacter, setSelectedCharacter] = useState({});
     const editCharacter = async (characterId) => {
@@ -53,7 +63,7 @@ export const Character = () => {
 
     return(
         <div>
-            <CharacterContext.Provider value={{characters, mangas, refetchCharacters, editCharacter, deleteCharacter}}>
+            <CharacterContext.Provider value={{characters, mangas, addCharacter, editCharacter, deleteCharacter}}>
                 <CharacterList />
                 <CharacterAddForm />
                 {selectedCharacter.name && <CharacterUpdateForm  selectedCharacter={selectedCharacter} setSelectedCharacter={setSelectedCharacter} updateCharacter={updateCharacter}/>}

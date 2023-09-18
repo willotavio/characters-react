@@ -21,3 +21,15 @@
     background-color: #ddddddbb;
     text-align: center;
 }
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+form input, select{
+    width: 10rem;
+}
+form span{
+    position: absolute;
+    margin-left: 1rem;
+}
